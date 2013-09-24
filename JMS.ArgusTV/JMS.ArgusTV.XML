@@ -1,0 +1,924 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JMS.ArgusTV</name>
+    </assembly>
+    <members>
+        <member name="T:JMS.ArgusTV.IRecordingDeviceFactory">
+            <summary>
+            Wird zum Anlegen von Geräten verwendet. 
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.IRecordingDeviceFactory.CreateDevice(System.String,System.Int32)">
+            <summary>
+            Erstellt ein neues Gerät.
+            </summary>
+            <param name="name">Der eindeutige Name des Gerätes.</param>
+            <param name="priority">Die Priorität des Gerätes - kleiner Werte sind besser.</param>
+            <returns>Das gewünschte Gerät.</returns>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingActivities">
+            <summary>
+            Alle gerade aktiven Aufzeichnungen.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.SetThreadExecutionState(JMS.ArgusTV.RecordingActivities.ExecutionState)">
+            <summary>
+            Steuert die Sperre für den Übergang in den Schlafzustand.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.m_activities">
+            <summary>
+            Alle bekannten Aufzeichnungen.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.m_worker">
+            <summary>
+            Steuert den Ablauf.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.#ctor">
+            <summary>
+            Erstellt eine neue Aufgabenverwaltung.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.GetOrCreate(System.Guid,JMS.ArgusTV.RecordingService)">
+            <summary>
+            Ermittelt eine Aktivität und legt sie bei Bedarf neu an.
+            </summary>
+            <param name="activityIdentifier">Die eindeutige Kennung der Aktivität.</param>
+            <param name="service">Der zugehörige Dienst.</param>
+            <returns>Die gewünschte Aktivität.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.Get(System.Guid)">
+            <summary>
+            Ermittelt eine Aktivität.
+            </summary>
+            <param name="activityIdentifier">Die eindeutige Kennung der Aktivität.</param>
+            <returns>Die gewünschte Aktivität.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.Remove(System.Guid)">
+            <summary>
+            Entfernt eine Arbeitseinheit.
+            </summary>
+            <param name="key">Die eindeutige Kennung der Arbeitseinheit.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.Worker">
+            <summary>
+            Wird periodisch aufgerufen und prüft, ob etwas zu tun ist.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivities.Dispose">
+            <summary>
+            Beendet die Verwaltung endgültig.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingActivities.ExecutionState">
+            <summary>
+            Die einzelnen Zustände der Sperre des Schlafzsutands.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.Error">
+            <summary>
+            Es ist ein Fehler aufgetreten.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.SystemRequired">
+            <summary>
+            Schlafzustand ist grundsätzlich verboten.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.DisplayRequired">
+            <summary>
+            Die Anzeige wird benötigt.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.UserPresent">
+            <summary>
+            Ein Benutzer benötigt das System.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.AwayModeRequired">
+            <summary>
+            Die Simulation des Schlafzustands ist gestattet.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivities.ExecutionState.Continuous">
+            <summary>
+            Gesetzt, um mit einem einmaligen Aufruf einen Zustand zu fixieren.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingActivity">
+            <summary>
+            Eine einzelne Aufzeichnung.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_nextTime">
+            <summary>
+            Der nächste Zeitpunkt, an dem eine Ausführung erwünscht ist.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_run">
+            <summary>
+            Die nächste Aktion, die auszuführen ist.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_service">
+            <summary>
+            Der zugehörige Dienst.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_synchronizer">
+            <summary>
+            Synchronisiert alle Zustandsänderungen.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_isRunning">
+            <summary>
+            Gesetzt, wenn diese Aufzeichnung bereits aktiv ist.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_device">
+            <summary>
+            Das Gerät, das wir verwenden.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_recordingPath">
+            <summary>
+            Unser Aufzeichnungsverzeichnis.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_schedulerHost">
+            <summary>
+            Der Name des Rechners mit dem Scheduler.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_schedulerPort">
+            <summary>
+            Die Adresses des Schedulers.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_streamIdentifier">
+            <summary>
+            Gesetzt, wenn die Aufzeichnung am Gerät angemeldet wurde.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_allocation">
+            <summary>
+            Die zugehörige Auswahl des Gerätes.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_program">
+            <summary>
+            Die Daten zur Sendung.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_startTime">
+            <summary>
+            Die ursprüngliche Startzeit.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_originalEndTime">
+            <summary>
+            Die geplante Endzeit.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_currentEndTime">
+            <summary>
+            Die aktuelle Endzeit.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_sources">
+            <summary>
+            Die möglichen Quellen passend zum Namen des Senders.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_incomplete">
+            <summary>
+            Gesetzt, wenn die Aufzeichnung unvollständig ist.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingActivity.m_aborted">
+            <summary>
+            Gesetzt, wenn ein Abbruch erfolgt ist.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.#ctor(JMS.ArgusTV.RecordingService)">
+            <summary>
+            Erzeugt eine neue Aktivität.
+            </summary>
+            <param name="service">Der zugehörige Dienst.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.DoNothing">
+            <summary>
+            Macht einfach nur nichts.
+            </summary>
+            <returns>Immer gesetzt.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Validate">
+            <summary>
+            Prüft die Eingangsdaten.
+            </summary>
+            <returns>Gesetzt, wenn weitere Aktionen notwendig sind.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Start">
+            <summary>
+            Startet die Aufzeichnung, sobald dies möglich ist.
+            </summary>
+            <returns>Gesetzt, wenn weitere asynchrone Operationen notwendig sind.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.ReleaseDevice">
+            <summary>
+            Beendet die Nutzung des Gerätes.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Finish">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Start(System.String,System.Int32,ArgusTV.DataContracts.CardChannelAllocation,System.DateTime,System.DateTime,ArgusTV.DataContracts.UpcomingProgram,System.String)">
+            <summary>
+            Beginnt eine neue Aufzeichnung.
+            </summary>
+            <param name="serverHostName">Der Name des ArgusTV Steuerdienstes.</param>
+            <param name="tcpPort">Die Adresse des Steuerdienstes.</param>
+            <param name="channelAllocation">Das Gerät, auf dem die Aufzeichnung stattfinden soll.</param>
+            <param name="startTimeUtc">Der Startzeitpunkt.</param>
+            <param name="stopTimeUtc">Der Endzeitpunkt.</param>
+            <param name="recordingProgram">Das aufzuzeichnende Programm.</param>
+            <param name="suggestedBaseFileName">Ein Vorschlag für den Namen der Aufzeichnungsdatei.</param>
+            <returns>Gesetzt, wenn der Start eingeleitet wurde.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.SetNewStopTime(System.DateTime)">
+            <summary>
+            Verändert den Endzeitpunkt.
+            </summary>
+            <param name="newEnd">Der neue Endzeitpunkt.</param>
+            <returns>Gesetzt, wenn die Änderung erfolgreich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Abort">
+            <summary>
+            Verändert den Endzeitpunkt.
+            </summary>
+            <returns>Gesetzt, wenn die Änderung erfolgreich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.ModifyEnd(System.DateTime,System.Boolean)">
+            <summary>
+            Verändert den Endzeitpunkt.
+            </summary>
+            <param name="newEnd">Der neue Endzeitpunkt.</param>
+            <param name="aborted">Gesetzt, wenn es sich um einen Abbruch handelt.</param>
+            <returns>Gesetzt, wenn die Änderung erfolgreich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingActivity.Run">
+            <summary>
+            Führt den aktuelle Arbeitsschritt aus.
+            </summary>
+            <returns>Gesetzt, wenn später weitere Schritte notwendig sind.</returns>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingActivity.NextTime">
+            <summary>
+            Meldet den Zeitpunkt der nächsten Ausführung.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingActivity.CurrentEndTime">
+            <summary>
+            Die aktuelle Endzeit.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice">
+            <summary>
+            Ein einzelnes Aufzeichnungsgerät.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice.m_isDisposed">
+            <summary>
+            Gesetzt, sobald das Gerät freigegeben wurde.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.#ctor(System.String,System.Int32)">
+            <summary>
+            Erstellt eine neue Simulation.
+            </summary>
+            <param name="name">Der Name des Gerätes.</param>
+            <param name="priority">Die Priorität des Gerätes - kleiner Werte sind besser.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.OnDispose">
+            <summary>
+            Beendet die Nutzung dieses Gerätes endgültig.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.Start(JMS.ArgusTV.RecordingDevice.SourceResolveResult,System.String)">
+            <summary>
+            Beginnt eine neue Aufzeichnung.
+            </summary>
+            <param name="source">Der zu verwendende Sender.</param>
+            <param name="path">Der volle Pfad zur Aufzeichnungsdatei.</param>
+            <returns>Gesetzt, wenn ein Start möglich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.Resolve(System.String)">
+            <summary>
+            Ermittelt zu einem Text den Sender.
+            </summary>
+            <param name="channelIdentification">Die Identifikation des Senders.</param>
+            <returns>Die Senderinformationen.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.CheckForCommonSourceGroups(JMS.ArgusTV.RecordingDevice.SourceResolveResult,JMS.ArgusTV.RecordingDevice.SourceResolveResult)">
+            <summary>
+            Prüft, ob Sender gemeinsam aufgezeichnet werden können.
+            </summary>
+            <param name="left">Die Daten eines Senders.</param>
+            <param name="right">Die Daten eines anderen Senders.</param>
+            <returns>Gesetzt, wenn eine gemeinsame Aufzeichnung möglich ist.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.Stop(System.Guid)">
+            <summary>
+            Beendet eine Aufzeichnung.
+            </summary>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice.Dispose">
+            <summary>
+            Beendet die Nutzung dieses Gerätes endgültig.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevice.Name">
+            <summary>
+            Der Name des Gerätes.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevice.Priority">
+            <summary>
+            Die Priorität des Gerätes, kleinere Werte werden bevorzugt.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice.SourceResolveResult">
+            <summary>
+            Das Ergebnis eines Auflösevorgangs eines Namens gegen die Senderdaten.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice`2">
+            <summary>
+            Ein einzelnes Aufzeichnungsgerät.
+            </summary>
+            <typeparam name="TSourceType">Die Art, wie Quellen identifiziert werden.</typeparam>
+            <typeparam name="TAsyncControlType">Die Art, wie asynchrone Vorgänge gesteuert werden.</typeparam>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.m_streams">
+            <summary>
+            Alle aktuellen Aufzeichnungsströme.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.m_queue">
+            <summary>
+            Die Warteschlange.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.#ctor(System.String,System.Int32)">
+            <summary>
+            Erstellt eine neue Simulation.
+            </summary>
+            <param name="name">Der Name des Gerätes.</param>
+            <param name="priority">Die Priorität des Gerätes - kleiner Werte sind besser.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.CanRecordedInParallel(`0,`0)">
+            <summary>
+            Prüft, ob zwei Quellen zum gleichen Zeitpunkt aufgezeichnet werden können.
+            </summary>
+            <param name="first">Eine Quelle.</param>
+            <param name="second">Eine andere Quelle.</param>
+            <returns>Gesetzt, wenn eine gleichzeitige Aufzeichnung möglich ist.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.GetResult``1(`1)">
+            <summary>
+            Ermittelt zu einer asynchronen Operation das Ergebnis.
+            </summary>
+            <typeparam name="TResult">Die Art des Ergebnisses.</typeparam>
+            <param name="control">Die Steuerinformation der Operation.</param>
+            <returns>Das gewünschte Ergebnis.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.ReserveDevice">
+            <summary>
+            Wird aufgerufen, um das zugehörige Gerät zu reservieren.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.ReleaseDevice">
+            <summary>
+            Gibt die Nutzung des Gerätes endültig auf.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Tune(`0)">
+            <summary>
+            Wählt den Empfang einer Quelle an.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.BeginRecording(`0,System.Guid,System.String)">
+            <summary>
+            Beginnt mit der Aufzeichnung einer Quelle.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+            <param name="recordingPath">Der volle Pfad zur Aufzeichnungsdatei.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.EndRecording(`0,System.Guid,System.String)">
+            <summary>
+            Beendet die Aufzeichnung einer Quelle.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+            <param name="recordingPath">Der volle Pfad zur Aufzeichnungsdatei.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.OnResolve(System.String)">
+            <summary>
+            Ermittelt zu einem Text den Sender.
+            </summary>
+            <param name="channelIdentification">Die Identifikation des Senders.</param>
+            <returns>Die Senderinformationen.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Resolve(System.String)">
+            <summary>
+            Ermittelt zu einem Text den Sender.
+            </summary>
+            <param name="channelIdentification">Die Identifikation des Senders.</param>
+            <returns>Die Senderinformationen.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.CheckForCommonSourceGroups(JMS.ArgusTV.RecordingDevice.SourceResolveResult,JMS.ArgusTV.RecordingDevice.SourceResolveResult)">
+            <summary>
+            Prüft, ob Sender gemeinsam aufgezeichnet werden können.
+            </summary>
+            <param name="left">Die Daten eines Senders.</param>
+            <param name="right">Die Daten eines anderen Senders.</param>
+            <returns>Gesetzt, wenn eine gemeinsame Aufzeichnung möglich ist.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Enqueue(System.Func{`1})">
+            <summary>
+            Beginnt mit der Verarbeitung einer asynchronen Operation.
+            </summary>
+            <param name="starter">Beginnt die Operation.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Enqueue``1(System.Func{`1},System.Action{``0})">
+            <summary>
+            Beginnt mit der Verarbeitung einer asynchronen Operation.
+            </summary>
+            <typeparam name="TResult">Die Art des Ergebnisses.</typeparam>
+            <param name="starter">Beginnt die Operation.</param>
+            <param name="processor">Wird mit Abschluss der Operation aufgerufen.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.ProcessQueue">
+            <summary>
+            Führt den nächsten Eintrag der Warteschlange aus.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Start(JMS.ArgusTV.RecordingDevice.SourceResolveResult,System.String)">
+            <summary>
+            Beginnt eine neue Aufzeichnung.
+            </summary>
+            <param name="source">Der zu verwendende Sender.</param>
+            <param name="path">Der volle Pfad zur Aufzeichnungsdatei.</param>
+            <returns>Gesetzt, wenn ein Start möglich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.Stop(System.Guid)">
+            <summary>
+            Beendet eine Aufzeichnung.
+            </summary>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice`2.SourceResolveResult">
+            <summary>
+            Das Ergebnis eines Auflösevorgangs eines Namens gegen die Senderdaten.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.SourceResolveResult.#ctor(`0[])">
+            <summary>
+            Erstellt ein neues Ergebnis.
+            </summary>
+            <param name="sources">Die zugehörigen Senderinformationen.</param>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevice`2.SourceResolveResult.Sources">
+            <summary>
+            Alle ermittelten Senderdaten.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice`2.StreamInformation">
+            <summary>
+            Die Daten zu einer einzelnen Aufzeichnung.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.StreamInformation.#ctor(`0,System.String)">
+            <summary>
+            Erstellt eine neue Information.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+            <param name="path">Der volle Pfad zur Aufzeichnungsdatei.</param>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevice`2.StreamInformation.Source">
+            <summary>
+            Die Informationen zur Quelle.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevice`2.StreamInformation.RecordingPath">
+            <summary>
+            Der volle Pfad zur Aufzeichnungsdatei.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice`2.QueueItem">
+            <summary>
+            Ein Eintrag der Warteschlange.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.QueueItem.m_starter">
+            <summary>
+            Die Methoden zum Starten der Operation.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.QueueItem.m_running">
+            <summary>
+            Gesetzt, sobald der Eintrag bearbeitet wird.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.QueueItem.#ctor(System.Func{`1})">
+            <summary>
+            Erstellt einen neuen Eintrag in der Warteschlange.
+            </summary>
+            <param name="starter">Die Methode zum Starten der Operation.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.QueueItem.OnRun(`1)">
+            <summary>
+            Führt die Operation aus.
+            </summary>
+            <param name="control">Die Steuereinheit der Operation.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.QueueItem.Run(System.Action)">
+            <summary>
+            Führt die Operation aus.
+            </summary>
+            <param name="whenDone">Wird nach Abschluss aufgerufen.</param>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevice`2.QueueItem`1">
+            <summary>
+            Ein Eintrag in der Warteschlange.
+            </summary>
+            <typeparam name="TResult">Die Art der Ergebnisdaten.</typeparam>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.QueueItem`1.m_device">
+            <summary>
+            Das zugehörige Gerät.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevice`2.QueueItem`1.m_processor">
+            <summary>
+            Die Bearbeitung des Ergebnisses.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.QueueItem`1.#ctor(System.Func{`1},System.Action{`2},JMS.ArgusTV.RecordingDevice{`0,`1})">
+            <summary>
+            Erstellt einen neuen Eintrag in der Warteschlange.
+            </summary>
+            <param name="starter">Die Methode zum Starten der Operation.</param>
+            <param name="processor">Die Methode zur Bearbeitung des Ergebnisses.</param>
+            <param name="device">Das zugehörige Gerät.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevice`2.QueueItem`1.OnRun(`1)">
+            <summary>
+            Führt die Operation aus.
+            </summary>
+            <param name="control">Die Steuereinheit der Operation.</param>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDevices">
+            <summary>
+            Alle aktuell verfügbaren Geräte.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDevices.m_devices">
+            <summary>
+            Alle unterstützten Geräte.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevices.#ctor(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEqualityComparer{System.String},JMS.ArgusTV.IRecordingDeviceFactory)">
+            <summary>
+            Erstellt eine neue Geräteverwaltung.
+            </summary>
+            <param name="deviceNames">Alle zu verwendenden Geräte.</param>
+            <param name="comparer">Der Vergleichsalgorithmus für Gerätenamen.</param>
+            <param name="factory">Komponente zum Anlegen von Geräten-</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevices.GetEnumerator">
+            <summary>
+            Meldet eine auflistung über alle Geräte.
+            </summary>
+            <returns>Die gewünschte Auflistung.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevices.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Meldet eine auflistung über alle Geräte.
+            </summary>
+            <returns>Die gewünschte Auflistung.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingDevices.Dispose">
+            <summary>
+            Beendet die Nutzung aller Geräte endgültig.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevices.NameComparer">
+            <summary>
+            Meldet den Vergleichsalgorithmus für Namen.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDevices.Item(System.String)">
+            <summary>
+            Meldet ein Gerät mit einem bestimmten Namen.
+            </summary>
+            <param name="deviceName">Der Name des gwünschten Gerätes.</param>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingService">
+            <summary>
+            Ein Beispieldienst für Aufzeichnungen mit <i>ArgusTV</i>.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingService.m_activities">
+            <summary>
+            Alle bekannten Aktivitäten.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingService.Configuration">
+            <summary>
+            Die zugehörige Konfiguration.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.#ctor(JMS.ArgusTV.RecordingServiceConfiguration,JMS.ArgusTV.IRecordingDeviceFactory)">
+            <summary>
+            Erstellt einen neuen Dienst.
+            </summary>
+            <param name="configuration">Die zu verwendende Konfiguration.</param>
+            <param name="factory">Kann Gerätebeschreibungen erzeugen.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.AbortRecording(System.String,System.Int32,ArgusTV.DataContracts.UpcomingProgram)">
+            <summary>
+            Beendet eine Aufzeichnung.
+            </summary>
+            <param name="serverHostName">Der Name des Rechners mit dem ArgusTV Scheduler.</param>
+            <param name="tcpPort">Die Adresse des Schedulers.</param>
+            <param name="recordingProgram">Das zu beendende Programm.</param>
+            <returns>Gesetzt, wenn der Aufruf erfolgreich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.AllocateCard(ArgusTV.DataContracts.Channel,ArgusTV.DataContracts.CardChannelAllocation[],System.Boolean)">
+            <summary>
+            Prüft, ob eine Ausführung möglich ist.
+            </summary>
+            <param name="channel">Der Sender, von dem aufgezeichnet werden soll.</param>
+            <param name="alreadyAllocated">Alle bereits geplanten Aufzeichnungen.</param>
+            <param name="useReversePriority">Gesetzt, um die Planungspriorität zu verändern (wird hier ignoriert).</param>
+            <returns>Der eindeutige Name des Gerätes, auf dem eine Aufzeichnung stattfinden könnte.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetRecordingShares">
+            <summary>
+            Meldet die Aufzeichnungsverzeichnisse in UNC Notation.
+            </summary>
+            <returns>Die Liste aller Aufzeichnungsverzeichnisse.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetTimeshiftShares">
+            <summary>
+            Meldet alle Verzeichniss zum zeitversetzten Betrachen von Aufzeichnungen in UNC Notation.
+            </summary>
+            <returns>Doe Liste der Verzeichnisse.</returns>
+            <seealso cref="M:JMS.ArgusTV.RecordingService.GetRecordingShares"/>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.Initialize(System.Guid,System.String,System.Int32)">
+            <summary>
+            Fordert den Dienst zur Anmeldung auf.
+            </summary>
+            <param name="recorderTunerId">Die eindeutige Kennung dieses Dienstes.</param>
+            <param name="serverHostName">Der Name des Steuerrechners.</param>
+            <param name="tcpPort">Die Adresse des Steuerdienstes.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.Ping">
+            <summary>
+            Meldet die API Version, mit der dieser Dienst erstellt wurde.
+            </summary>
+            <returns>Die verwendete API Version.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.StartRecording(System.String,System.Int32,ArgusTV.DataContracts.CardChannelAllocation,System.DateTime,System.DateTime,ArgusTV.DataContracts.UpcomingProgram,System.String)">
+            <summary>
+            Beginnt eine neue Aufzeichnung.
+            </summary>
+            <param name="serverHostName">Der Name des ArgusTV Steuerdienstes.</param>
+            <param name="tcpPort">Die Adresse des Steuerdienstes.</param>
+            <param name="channelAllocation">Das Gerät, auf dem die Aufzeichnung stattfinden soll.</param>
+            <param name="startTimeUtc">Der Startzeitpunkt.</param>
+            <param name="stopTimeUtc">Der Endzeitpunkt.</param>
+            <param name="recordingProgram">Das aufzuzeichnende Programm.</param>
+            <param name="suggestedBaseFileName">Ein Vorschlag für den Namen der Aufzeichnungsdatei.</param>
+            <returns>Gesetzt, wenn der Start eingeleitet wurde.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.ValidateAndUpdateRecording(ArgusTV.DataContracts.CardChannelAllocation,ArgusTV.DataContracts.UpcomingProgram,System.DateTime)">
+            <summary>
+            Prüft eine Aufzeichnung und verändert optional den Endzeitpunkt.
+            </summary>
+            <param name="channelAllocation">Informationen zur Aufzeichnung.</param>
+            <param name="recordingProgram">Das betroffene Programm.</param>
+            <param name="stopTimeUtc">Der neue Endzeitpunkt.</param>
+            <returns>Gesetzt, wenn die Änderung erfolgreich war.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.Dispose">
+            <summary>
+            Beendet den Dienst endgültig.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetLiveStreams">
+            <summary>
+            Meldet alle <i>LIVE</i> Datenströme.
+            </summary>
+            <returns>Die Liste aller Datenströme.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.TuneLiveStream(ArgusTV.DataContracts.Channel,ArgusTV.DataContracts.CardChannelAllocation,ArgusTV.DataContracts.LiveStream@)">
+            <summary>
+            Aktiviert den <i>LIVE</i> Modus.
+            </summary>
+            <param name="channel">Der gewünschte Sender.</param>
+            <param name="upcomingRecordingAllocation">Beschreibung der Belegung.</param>
+            <param name="liveStream">Die Daten zum Datenstrom.</param>
+            <returns>Das Ergebnis der Operation.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.KeepLiveStreamAlive(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetLiveStreamTuningDetails(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetChannelsLiveState(ArgusTV.DataContracts.Channel[],ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="channels"></param>
+            <param name="liveStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.StopLiveStream(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.HasTeletext(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.StartGrabbingTeletext(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.IsGrabbingTeletext(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.GetTeletextPageBytes(ArgusTV.DataContracts.LiveStream,System.Int32,System.Int32,System.Int32@)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+            <param name="pageNumber"></param>
+            <param name="subPageNumber"></param>
+            <param name="subPageCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingService.StopGrabbingTeletext(ArgusTV.DataContracts.LiveStream)">
+            <summary>
+            
+            </summary>
+            <param name="liveStream"></param>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingService.Devices">
+            <summary>
+            Alle unterstützten Geräte.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingService.Name">
+            <summary>
+            Der (eindeutige) Name dieses Dienstes.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingService.Identifier">
+            <summary>
+            Die eindeutige Kennung dieses Dienstes.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDirectoryUsage">
+            <summary>
+            Die Nutzung eines Aufzeichnungsverzeichnisses.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDirectoryUsage.None">
+            <summary>
+            Nur ein Platzhalter.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDirectoryUsage.Recording">
+            <summary>
+            Hier werden Aufzeichnungen abgelegt.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingDirectoryUsage.Timeshift">
+            <summary>
+            Kann zum zeitversetzten Betrachten verwendet werden.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingDirectoryConfiguration">
+            <summary>
+            Beschreibt ein Aufzeichnungsverzeichnis.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDirectoryConfiguration.LocalPath">
+            <summary>
+            Der Pfad des Verzeichnisses aus Sicht des Aufzeichnungsrechners.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDirectoryConfiguration.NetworkPath">
+            <summary>
+            Der Pfad des Verzeichnisses aus Sicht des Netzwerks.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingDirectoryConfiguration.Usage">
+            <summary>
+            Die Art der Nutzung des Verzeichnisses.
+            </summary>
+        </member>
+        <member name="T:JMS.ArgusTV.RecordingServiceConfiguration">
+            <summary>
+            Beschreibt die Konfiguration eines Aufzeichnungsdienstes.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingServiceConfiguration.Directories">
+            <summary>
+            Alle Aufzeichnungsverzeichnisse.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.RecordingServiceConfiguration.DeviceNames">
+            <summary>
+            Die Liste der zu verwendenden Geräte.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingServiceConfiguration.CreateService">
+            <summary>
+            Erstellt aus der Konfiguration den Dienst.
+            </summary>
+            <returns>Der gewünschte Dienst.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingServiceConfiguration.Load(System.String)">
+            <summary>
+            Lädt eine Konfiguration aus einer Datei.
+            </summary>
+            <param name="path">Der volle Pfad zur Datei.</param>
+            <returns>Die in der Datei enthaltene Konfiguration.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.RecordingServiceConfiguration.CreateServiceHost">
+            <summary>
+            Legt die Dienstumgebung an.
+            </summary>
+            <returns>Die angeforderte Umgebung.</returns>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingServiceConfiguration.Name">
+            <summary>
+            Der Name des Dienstes.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingServiceConfiguration.Port">
+            <summary>
+            Der Kommunikationskanal.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingServiceConfiguration.DeviceFactoryTypeName">
+            <summary>
+            Der Name der .NET Klasse zur Implementierung der Geräte.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingServiceConfiguration.NameComparerPropertyName">
+            <summary>
+            Der Name der <see cref="T:System.StringComparer"/> Eigenschaft die zum Vergleich von Gerätenamen verwendet werden soll.
+            </summary>
+        </member>
+        <member name="P:JMS.ArgusTV.RecordingServiceConfiguration.Comparer">
+            <summary>
+            Meldet den Vergleichsalgorithmus.
+            </summary>
+        </member>
+    </members>
+</doc>

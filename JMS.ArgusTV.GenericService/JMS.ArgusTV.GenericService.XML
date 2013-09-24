@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JMS.ArgusTV.GenericService</name>
+    </assembly>
+    <members>
+        <member name="T:JMS.ArgusTV.GenericService.Program">
+            <summary>
+            Repräsentiert den Windows Prozess als Ganzes.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.GenericService.Program.DebugMode">
+            <summary>
+            Gesetzt, wenn im Testmodus gearbeitet wird.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Main(System.String[])">
+            <summary>
+            Startet die Anwendung.
+            </summary>
+            <param name="args">Feinsteurung der Anwendung.</param>
+            <returns>Das Ergebnis der Ausführung.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.CreateServiceName(JMS.ArgusTV.RecordingServiceConfiguration)">
+            <summary>
+            Erstellt den eindeutigen Namen des Dienstes.
+            </summary>
+            <param name="configuration">Die verwendete Konfiguration.</param>
+            <returns>Der gewünschte Name.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Install(JMS.ArgusTV.RecordingServiceConfiguration,System.String,System.Boolean)">
+            <summary>
+            Installiert einen Dienst.
+            </summary>
+            <param name="configuration">Die Konfiguration des Dienstes.</param>
+            <param name="fileName">Der volle Pfad zur Konfigurationsdatei.</param>
+            <param name="install">Gesetzt, wenn eine Installation ausgeführt werden soll.</param>
+        </member>
+        <member name="T:JMS.ArgusTV.GenericService.Program.Service">
+            <summary>
+            Der eigentliche Dienst.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.GenericService.Program.Service.m_configuration">
+            <summary>
+            Die zugehörige Konfiguration.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.GenericService.Program.Service.m_recordingService">
+            <summary>
+            Der Aufzeichnungsdienst.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.GenericService.Program.Service.m_serviceHost">
+            <summary>
+            Die WCF Kapsel des Dienstes.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.#ctor(JMS.ArgusTV.RecordingServiceConfiguration)">
+            <summary>
+            Erstellt einen neuen Windows Dienst.
+            </summary>
+            <param name="configuration">Die zu verwendende Configuration.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.CreateRecordingService">
+            <summary>
+            Erstellt den Aufzeichnungsdienst.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.RemoveRecordingService">
+            <summary>
+            Beendet den Aufzeichnungsdienst.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.OnStart(System.String[])">
+            <summary>
+            Startet den Dienst.
+            </summary>
+            <param name="args">Die Parameter des Dienstes.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.OnStop">
+            <summary>
+            Beendet den Dienst.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.GenericService.Program.Service.Run(JMS.ArgusTV.RecordingServiceConfiguration)">
+            <summary>
+            Erstellt einen neuen Windows Dienst.
+            </summary>
+            <param name="configuration">Die zu verwendende Configuration.</param>
+        </member>
+    </members>
+</doc>

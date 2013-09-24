@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JMS.ArgusTV.DVBNETRecorder</name>
+    </assembly>
+    <members>
+        <member name="T:JMS.ArgusTV.DVBNETRecorder.DeviceFactory">
+            <summary>
+            Erlaubt das Anlegen von Geräten.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.DeviceFactory.#cctor">
+            <summary>
+            Führt einmalige Initialisierungen aus
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.DeviceFactory.ReadSetting(JMS.DVB.Profile,System.String,System.UInt32)">
+            <summary>
+            Liest eine Einstellung aus.
+            </summary>
+            <param name="profile">Ein Geräteprofil.</param>
+            <param name="settingName">Der Name der Einstellung.</param>
+            <param name="settingDefault">Die Voreinstellung der Einstellung.</param>
+            <returns>Der aktuelle Wert, gegebenenfalls die Voreinstellung.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.DeviceFactory.CreateDevice(System.String,System.Int32)">
+            <summary>
+            Erstellt ein neues Gerät.
+            </summary>
+            <param name="name">Der eindeutige Name des Gerätes.</param>
+            <param name="priority">Die Priorität des Gerätes - kleiner Werte sind besser.</param>
+            <returns>Das gewünschte Gerät.</returns>
+        </member>
+        <member name="T:JMS.ArgusTV.DVBNETRecorder.RecordingDevice">
+            <summary>
+            Ein einzelnes Aufzeichnungsgerät.
+            </summary>
+        </member>
+        <member name="F:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.m_cardServer">
+            <summary>
+            Die zugehörige Instanz des Aufzeichnungsprozesses.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.#ctor(System.String,System.Int32)">
+            <summary>
+            Erstellt eine neue Simulation.
+            </summary>
+            <param name="name">Der Name des Gerätes.</param>
+            <param name="priority">Die Priorität des Gerätes - kleiner Werte sind besser.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.CanRecordedInParallel(JMS.DVB.SourceSelection,JMS.DVB.SourceSelection)">
+            <summary>
+            Prüft, ob zwei Quellen zum gleichen Zeitpunkt aufgezeichnet werden können.
+            </summary>
+            <param name="first">Eine Quelle.</param>
+            <param name="second">Eine andere Quelle.</param>
+            <returns>Gesetzt, wenn eine gleichzeitige Aufzeichnung möglich ist.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.OnResolve(System.String)">
+            <summary>
+            Ermittelt zu einem Text den Sender.
+            </summary>
+            <param name="channelIdentification">Die Identifikation des Senders.</param>
+            <returns>Die Senderinformationen.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.GetResult``1(System.IAsyncResult)">
+            <summary>
+            Ermittelt zu einer asynchronen Operation das Ergebnis.
+            </summary>
+            <typeparam name="TResult">Die Art des Ergebnisses.</typeparam>
+            <param name="control">Die Steuerinformation der Operation.</param>
+            <returns>Das gewünschte Ergebnis.</returns>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.ReserveDevice">
+            <summary>
+            Wird aufgerufen, um das zugehörige Gerät zu reservieren.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.ReleaseDevice">
+            <summary>
+            Gibt die Nutzung des Gerätes endültig auf.
+            </summary>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.ReleaseDevice(System.Boolean)">
+            <summary>
+            Gibt die Nutzung des Gerätes endültig auf.
+            </summary>
+            <param name="dispose">Gesetzt, wenn es sich um die endgültige Freigabe handelt.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.Tune(JMS.DVB.SourceSelection)">
+            <summary>
+            Wählt den Empfang einer Quelle an.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.BeginRecording(JMS.DVB.SourceSelection,System.Guid,System.String)">
+            <summary>
+            Beginnt mit der Aufzeichnung einer Quelle.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+            <param name="recordingPath">Der volle Pfad zur Aufzeichnungsdatei.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.EndRecording(JMS.DVB.SourceSelection,System.Guid,System.String)">
+            <summary>
+            Beendet die Aufzeichnung einer Quelle.
+            </summary>
+            <param name="source">Die gewünschte Quelle.</param>
+            <param name="streamIdentifier">Die eindeutige Kennung der Aufzeichnung.</param>
+            <param name="recordingPath">Der volle Pfad zur Aufzeichnungsdatei.</param>
+        </member>
+        <member name="M:JMS.ArgusTV.DVBNETRecorder.RecordingDevice.OnDispose">
+            <summary>
+            Beendet die Nutzung dieses Gerätes endgültig.
+            </summary>
+        </member>
+    </members>
+</doc>
