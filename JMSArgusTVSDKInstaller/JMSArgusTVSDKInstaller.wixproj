@@ -13,12 +13,12 @@
     <EnableProjectHarvesting>True</EnableProjectHarvesting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -29,6 +29,16 @@
     <ProjectReference Include="..\JMS.ArgusTV.DVBNETRecorder\JMS.ArgusTV.DVBNETRecorder.csproj">
       <Name>JMS.ArgusTV.DVBNETRecorder</Name>
       <Project>{a5f61343-33d6-48bb-8b73-060fddb15829}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>
+      </DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Symbols;Sources;Content;Satellites;Documents</RefProjectOutputGroups>
+      <RefTargetDir>
+      </RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\JMS.ArgusTV.GenericService\JMS.ArgusTV.GenericService.csproj">
+      <Name>JMS.ArgusTV.GenericService</Name>
+      <Project>{11ad9b0d-3985-4c60-ad8a-8afdf43c47d2}</Project>
       <Private>True</Private>
       <DoNotHarvest>
       </DoNotHarvest>
@@ -56,16 +66,6 @@
       <RefTargetDir>
       </RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\WCF Test Host\JMS.ArgusTV.GenericService.csproj">
-      <Name>JMS.ArgusTV.GenericService</Name>
-      <Project>{11ad9b0d-3985-4c60-ad8a-8afdf43c47d2}</Project>
-      <Private>True</Private>
-      <DoNotHarvest>
-      </DoNotHarvest>
-      <RefProjectOutputGroups>Binaries;Symbols;Sources;Content;Satellites;Documents</RefProjectOutputGroups>
-      <RefTargetDir>
-      </RefTargetDir>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
@@ -76,6 +76,12 @@
       <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
       <Name>WixNetFxExtension</Name>
     </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\JMSArgusTVRecorderSDKSetup.msi" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

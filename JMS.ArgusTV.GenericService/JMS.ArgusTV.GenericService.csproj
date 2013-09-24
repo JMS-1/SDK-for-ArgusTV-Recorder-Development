@@ -48,16 +48,14 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ArgusTV.DataContracts, Version=2.0.1.0, Culture=neutral, PublicKeyToken=452db6a8c7afea30, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.DataContracts.dll</HintPath>
+    <Reference Include="ArgusTV.DataContracts">
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.DataContracts.dll</HintPath>
     </Reference>
     <Reference Include="ArgusTV.ServiceAgents">
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.ServiceAgents.dll</HintPath>
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.ServiceAgents.dll</HintPath>
     </Reference>
-    <Reference Include="ArgusTV.ServiceContracts, Version=2.0.1.0, Culture=neutral, PublicKeyToken=452db6a8c7afea30, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.ServiceContracts.dll</HintPath>
+    <Reference Include="ArgusTV.ServiceContracts">
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.ServiceContracts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />

@@ -35,15 +35,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ArgusTV.DataContracts">
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.DataContracts.dll</HintPath>
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.DataContracts.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ArgusTV.ServiceAgents">
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.ServiceAgents.dll</HintPath>
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.ServiceAgents.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="ArgusTV.ServiceContracts">
-      <HintPath>..\..\..\..\ARGUS TV 2.1\Develop\ArgusTV.ServiceContracts.dll</HintPath>
+      <HintPath>C:\Program Files\ARGUS TV\Scheduler Console\ArgusTV.ServiceContracts.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

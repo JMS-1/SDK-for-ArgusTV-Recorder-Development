@@ -65,13 +65,14 @@
     <ProjectReference Include="..\JMS.ArgusTV\JMS.ArgusTV.csproj">
       <Project>{0e8614a8-5303-44cd-a7b4-a7e560a1a20d}</Project>
       <Name>JMS.ArgusTV</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir 2&gt;nul "$(ProjectDir)..\WCF Test Host\bin\devices"
-xcopy &gt;nul /y "$(TargetPath)" "$(ProjectDir)..\WCF Test Host\bin\devices"
-xcopy &gt;nul /y "$(TargetDir)Rtp.Config" "$(ProjectDir)..\WCF Test Host\bin\devices"</PostBuildEvent>
+    <PostBuildEvent>mkdir 2&gt;nul "$(ProjectDir)..\JMS.ArgusTV.GenericService\bin\devices"
+xcopy &gt;nul /y "$(TargetPath)" "$(ProjectDir)..\JMS.ArgusTV.GenericService\bin\devices"
+xcopy &gt;nul /y "$(TargetDir)Rtp.Config" "$(ProjectDir)..\JMS.ArgusTV.GenericService\bin\devices"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
