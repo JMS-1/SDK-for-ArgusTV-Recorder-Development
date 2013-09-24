@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product
+    Id="*"
+    Name="JMS SDK for Argus TV Recorder Development"
+    Language="1033"
+    Version="0.4.0.0"
+    Manufacturer="JMS"
+    UpgradeCode="fd7b6247-d6c2-4ab5-82b1-7baa1a44b05a">
+
+    <Package
+      InstallPrivileges="elevated"
+      InstallerVersion="200"
+      Languages="1033"
+      Compressed="yes"
+      InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="Es ist bereits eine neuere Version installiert." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="Bitte erst einmal Microsoft .NET 4.0 installieren.">
+      <![CDATA[NETFRAMEWORK40FULL]]>
+    </Condition>
+
+    <Feature Id="ProductFeature" Title="JMS SDK for Argus TV Recorder Development" Level="1">
+      <ComponentGroupRef Id="JMS.ArgusTV.Binaries" />
+      <ComponentGroupRef Id="JMS.ArgusTV.Sources" />
+      <ComponentGroupRef Id="JMS.ArgusTV.Content" />
+      <ComponentGroupRef Id="JMS.ArgusTV.Documents" />
+      <ComponentGroupRef Id="JMS.ArgusTV.DVBNETRecorder.Binaries" />
+      <ComponentGroupRef Id="JMS.ArgusTV.DVBNETRecorder.Sources" />
+      <ComponentGroupRef Id="JMS.ArgusTV.DVBNETRecorder.Content" />
+      <ComponentGroupRef Id="JMS.ArgusTV.DVBNETRecorder.Documents" />
+      <ComponentGroupRef Id="JMS.ArgusTV.GenericService.Binaries" />
+      <ComponentGroupRef Id="JMS.ArgusTV.GenericService.Sources" />
+      <ComponentGroupRef Id="JMS.ArgusTV.GenericService.Content" />
+      <ComponentGroupRef Id="JMS.ArgusTV.GenericService.Documents" />
+      <ComponentGroupRef Id="JMS.ArgusTV.RtpDevice.Binaries" />
+      <ComponentGroupRef Id="JMS.ArgusTV.RtpDevice.Sources" />
+      <ComponentGroupRef Id="JMS.ArgusTV.RtpDevice.Content" />
+      <ComponentGroupRef Id="JMS.ArgusTV.RtpDevice.Documents" />
+
+      <ComponentRef Id="Samples.DVBNET" />
+      <ComponentRef Id="Samples.RTP" />
+
+      <ComponentRef Id="ThirdParty.DataContracts" />
+      <ComponentRef Id="ThirdParty.ServiceAgents" />
+      <ComponentRef Id="ThirdParty.ServiceContracts"/>
+
+      <ComponentRef Id="Doc.Backgrounder" />
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="InstallationWizard" />
+
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ManufacturerFolder" Name="JMS">
+          <Directory Id="INSTALLFOLDER" Name="Argus TV">
+
+            <Directory Id="JMS.ArgusTV.Binaries" />
+            <Directory Id="JMS.ArgusTV.Documents" />
+            <Directory Id="JMS.ArgusTV.GenericService.Binaries" />
+            <Directory Id="JMS.ArgusTV.GenericService.Documents" />
+
+            <Directory Id="DEVICEFOLDER" Name="devices">
+              <Directory Id="JMS.ArgusTV.DVBNETRecorder.Binaries"  />
+              <Directory Id="JMS.ArgusTV.DVBNETRecorder.Documents" />
+
+              <Directory Id="JMS.ArgusTV.RtpDevice.Binaries"  />
+              <Directory Id="JMS.ArgusTV.RtpDevice.Documents" />
+            </Directory>
+
+            <Directory Id="SOURCEFOLDER" Name="Sources">
+              <Directory Id="JMS.ArgusTV.Sources" Name="JMS.ArgusTV" />
+              <Directory Id="JMS.ArgusTV.Content" Name="JMS.ArgusTV" />
+              <Directory Id="JMS.ArgusTV.GenericService.Sources" Name="JMS.ArgusTV.GenericService" />
+              <Directory Id="JMS.ArgusTV.GenericService.Content" Name="JMS.ArgusTV.GenericService" />
+              <Directory Id="JMS.ArgusTV.DVBNETRecorder.Sources" Name="JMS.ArgusTV.DVBNETRecorder" />
+              <Directory Id="JMS.ArgusTV.DVBNETRecorder.Content" Name="JMS.ArgusTV.DVBNETRecorder" />
+              <Directory Id="JMS.ArgusTV.RtpDevice.Sources" Name="JMS.ArgusTV.RtpDevice" />
+              <Directory Id="JMS.ArgusTV.RtpDevice.Content" Name="JMS.ArgusTV.RtpDevice" />
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="Doc.Backgrounder" Guid="*">
+        <File Id="ArgusTV.Backgrounder" Source="$(var.JMS.ArgusTV.ProjectDir)Backgrounder.pdf" />
+      </Component>
+
+      <Component Id="ThirdParty.DataContracts" Guid="*">
+        <File Id="ArgusTV.DataContracts" Source="$(var.JMS.ArgusTV.GenericService.TargetDir)ArgusTV.DataContracts.dll" />
+      </Component>
+      <Component Id="ThirdParty.ServiceAgents" Guid="*">
+        <File Id="ArgusTV.ServiceAgents" Source="$(var.JMS.ArgusTV.GenericService.TargetDir)ArgusTV.ServiceAgents.dll" />
+      </Component>
+      <Component Id="ThirdParty.ServiceContracts" Guid="*">
+        <File Id="ArgusTV.ServiceContracts" Source="$(var.JMS.ArgusTV.GenericService.TargetDir)ArgusTV.ServiceContracts.dll" />
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="DEVICEFOLDER">
+      <Component Id="Samples.DVBNET" Guid="*">
+        <File Id="SampleConfiguration.DVBNET" Source="$(var.JMS.ArgusTV.DVBNETRecorder.ProjectDir)DvbNet.config" />
+      </Component>
+      <Component Id="Samples.RTP" Guid="*">
+        <File Id="SampleConfiguration.RTP" Source="$(var.JMS.ArgusTV.RtpDevice.ProjectDir)Rtp.config" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
