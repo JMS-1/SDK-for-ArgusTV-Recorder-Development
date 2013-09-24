@@ -13,12 +13,12 @@
     <EnableProjectHarvesting>True</EnableProjectHarvesting>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>setup\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>setup\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -78,10 +78,10 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\" />
+    <Folder Include="setup\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\JMSArgusTVRecorderSDKSetup.msi" />
+    <Content Include="setup\JMSArgusTVRecorderSDKSetup.msi" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
